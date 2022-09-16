@@ -1,0 +1,30 @@
+Tutorial:
+https://www.mysqltutorial.org/mysql-variables/
+
+
+
+"""
+https://www.hackerrank.com/challenges/earnings-of-employees
+"""
+
+set @max_salary = (select max(salary*months) from Employee);
+set @fr_max = (select count(salary*months) as sal from Employee where salary*months = @max_salary);
+
+select @max_salary, @fr_max; 
+
+
+
+"""
+https://www.hackerrank.com/challenges/the-blunder
+"""
+
+SET @actual := (SELECT avg(salary) FROM EMPLOYEES);
+
+UPDATE
+    EMPLOYEES 
+SET
+    salary = REPLACE(salary, '0', '');
+    
+SET @miscalcualated := (SELECT avg(salary) FROM EMPLOYEES);
+
+SELECT ceiling(@actual - @miscalcualated);

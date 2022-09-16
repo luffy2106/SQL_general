@@ -1,0 +1,86 @@
+"""
+https://www.hackerrank.com/challenges/revising-aggregations-the-count-function
+"""
+
+SELECT COUNT(ID)
+FROM CITY
+WHERE POPULATION > 100000;
+
+"""
+https://www.hackerrank.com/challenges/revising-aggregations-sum
+"""
+select sum(population)
+from city
+where district = "California";
+
+"""
+https://www.hackerrank.com/challenges/revising-aggregations-the-average-function
+"""
+select avg(population)
+from CITY
+where district = "California";
+
+"""
+https://www.hackerrank.com/challenges/japan-population
+"""
+
+select sum(population)
+from CITY
+where countrycode = 'JPN';
+
+"""
+https://www.hackerrank.com/challenges/population-density-difference
+"""
+
+select max(population)-min(population)
+from CITY;
+
+
+"""
+https://www.hackerrank.com/challenges/weather-observation-station-2
+"""
+SELECT round(sum(LAT_N), 2), round(sum(LONG_W), 2) from STATION;
+
+"""
+https://www.hackerrank.com/challenges/weather-observation-station-13
+"""
+
+select round(sum(LAT_N),4) from STATION
+WHERE LAT_N > 38.7880 and LAT_N < 137.2345;
+
+"""
+https://www.hackerrank.com/challenges/weather-observation-station-14
+"""
+select round(max(LAT_N),4) from STATION
+WHERE LAT_N < 137.2345;
+
+"""
+https://www.hackerrank.com/challenges/weather-observation-station-15
+"""
+select round(LONG_W,4) from STATION
+where LAT_N = (select max(LAT_N) from STATION WHERE LAT_N < 137.2345);
+
+"""
+https://www.hackerrank.com/challenges/weather-observation-station-16
+"""
+select round(MIN(LAT_N),4) from STATION
+WHERE LAT_N > 38.7780;
+
+"""
+https://www.hackerrank.com/challenges/weather-observation-station-17
+"""
+select round(LONG_W,4) from STATION
+where LAT_N = (SELECT MIN(LAT_N) from STATION WHERE LAT_N > 38.7780);
+
+"""
+https://www.hackerrank.com/challenges/weather-observation-station-18
+"""
+select round(abs(MIN(LAT_N)-MAX(LAT_N)) + abs(MIN(LONG_W)-MAX(LONG_W)),4)
+from STATION;
+
+"""
+https://www.hackerrank.com/challenges/weather-observation-station-19
+"""
+select round(sqrt(POW(max(LAT_N)-min(LAT_N), 2) + POW(max(LONG_W)-min(LONG_W), 2)),4)
+FROM STATION;
+

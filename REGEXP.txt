@@ -1,0 +1,50 @@
+
+"""
+https://www.hackerrank.com/challenges/weather-observation-station-6
+"""
+
+SELECT DISTINCT CITY FROM STATION
+WHERE CITY REGEXP '^[aeiou]';
+
+"""
+https://www.hackerrank.com/challenges/weather-observation-station-7
+"""
+
+SELECT DISTINCT CITY FROM STATION
+WHERE CITY REGEXP '[aeiou]$';
+
+"""
+https://www.hackerrank.com/challenges/weather-observation-station-8
+"""
+
+SELECT DISTINCT CITY FROM STATION
+WHERE CITY REGEXP '^[aeiou].*[aeiou]$';
+
+"""
+https://www.hackerrank.com/challenges/weather-observation-station-9
+"""
+
+SELECT DISTINCT CITY FROM STATION
+WHERE CITY REGEXP '^[^AEIOU]';
+
+"""
+https://www.hackerrank.com/challenges/weather-observation-station-10
+"""
+
+SELECT DISTINCT CITY FROM STATION
+WHERE CITY REGEXP '[^AEIOU]$';
+
+"""
+https://www.hackerrank.com/challenges/weather-observation-station-11
+"""
+
+SELECT DISTINCT CITY FROM STATION
+WHERE CITY REGEXP '^[^AEIOU]|[^AEIOU]$';
+
+"""
+https://www.hackerrank.com/challenges/weather-observation-station-12
+"""
+
+SELECT DISTINCT CITY FROM STATION
+WHERE CITY REGEXP '^[^AEIOU].*[^AEIOU]$'
+
