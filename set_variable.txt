@@ -7,24 +7,33 @@ https://www.mysqltutorial.org/mysql-variables/
 https://www.hackerrank.com/challenges/earnings-of-employees
 """
 
-set @max_salary = (select max(salary*months) from Employee);
-set @fr_max = (select count(salary*months) as sal from Employee where salary*months = @max_salary);
+-- Define a variale which present the maximum total earnings for all employees
+SET @max_earning = (SELECT MAX(months*salary) FROM Employee); 
+-- Define a variale which present the total number of employees who have maximum total earnings.
+SET @count_max_earning = (SELECT COUNT(employee_id) FROM Employee WHERE months*salary = @max_earning);
 
-select @max_salary, @fr_max; 
+SELECT @max_earning, @count_max_earning
 
 
 
 """
 https://www.hackerrank.com/challenges/the-blunder
 """
-
+-- Get the average salary from the original table
 SET @actual := (SELECT avg(salary) FROM EMPLOYEES);
-
+-- Update EMPLOYEES table by removing all "0" causing by keyboard errors
 UPDATE
     EMPLOYEES 
 SET
     salary = REPLACE(salary, '0', '');
-    
+-- Get the real average salary from the updated table   
 SET @miscalcualated := (SELECT avg(salary) FROM EMPLOYEES);
+-- Get the resulting error
+SELECT ceiling(abs(@actual - @miscalcualated));
 
-SELECT ceiling(@actual - @miscalcualated);
+
+
+
+
+
+
