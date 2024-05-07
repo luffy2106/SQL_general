@@ -1,6 +1,9 @@
-"""
+#### Ex 1
+- Question
+```
 https://www.hackerrank.com/challenges/weather-observation-station-20
-"""
+```
+- Solution
 ```
 -- Sort LAT_N in ascending order and add index key in ascending order
 CREATE TABLE NEW_TABLE_STATION AS
@@ -22,9 +25,13 @@ SELECT
 SELECT @median_lat_n;
 ```
 
-"""
+#### Ex 2
+- Question
+```
 https://www.hackerrank.com/challenges/the-blunde
-"""
+```
+- Solution
+```
 -- Get the average salary from the original table
 SET @actual := (SELECT avg(salary) FROM EMPLOYEES);
 -- Update EMPLOYEES table by removing all "0" causing by keyboard errors
@@ -36,5 +43,5 @@ SET
 SET @miscalcualated := (SELECT avg(salary) FROM EMPLOYEES);
 -- Get the resulting error
 SELECT ceiling(abs(@actual - @miscalcualated));
-
+```
 

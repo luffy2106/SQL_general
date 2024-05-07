@@ -187,24 +187,67 @@ WHERE CustomerID = 1;
 ```
 
 
+#### 10. JOIN
+There are the different types of the JOINs in SQL
+Take a look at here for more info 
+```
+https://www.w3schools.com/sql/sql_join.asp
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-### What is the difference between Inner Join and Left Join ?
-
-The main difference between Inner Join and Left Join lies in the result set they produce when combining two tables.
-- Inner Join: An Inner Join returns only the matching rows from both tables. It selects the records that have matching values in both tables based on the specified join condition.
-- Left Join: A Left Join returns all the rows from the left (or first) table and the matching rows from the right (or second) table. If there are no matching rows in the right table, it still includes the rows from the left table but with NULL values for the columns of the right table
-
-Check ChatGPT to see example. 
+##### 10.1 (INNER) JOIN 
+Returns records that have matching values in both tables. You can use "JOIN" or "INNER JOIN", it's the same
+Syntax :
+```
+SELECT column_name(s)
+FROM table1
+INNER JOIN table2
+ON table1.column_name = table2.column_name;
+```
+Take a look at JOIN/INNER_JOIN for more example
+##### 10.2 LEFT (OUTER) JOIN
+- Returns all records from the left table(table 1), and the matched records from the right table(table 2). 
+- The LEFT JOIN keyword returns all records from the left table (table 1), even if there are no matches in the right table (table 2).
+- The result is 0 records from the right side, if there is no match.
+You can use "LEFT JOIN" or "LEFT OUTER JOIN", it's the same
+Syntax:
+```
+SELECT column_name(s)
+FROM table1
+LEFT JOIN table2
+ON table1.column_name = table2.column_name;
+```
+Take a look at JOIN/LEFT_JOIN for more example
+##### 10.3 RIGHT (OUTER) JOIN 
+- Returns all records from the right table(table 2), and the matched records from the left table(table 1)
+- The RIGHT JOIN keyword returns all records from the right table (table 2), even if there are no matches in the left table (table 1).
+- The result is 0 records from the left side, if there is no match.
+You can use "RIGHT JOIN" or "RIGHT OUTER JOIN", it's the same
+```
+SELECT column_name(s)
+FROM table1
+RIGHT JOIN table2
+ON table1.column_name = table2.column_name;
+```
+Take a look at JOIN/RIGHT_JOIN for more example
+##### 10.3 FULL (OUTER) JOIN
+- Returns all records when there is a match in either left or right table
+- If there are rows in "table 1" that do not have matches in "table 2", or if there are rows in "table 2" that do not have matches in "table 1", those rows will be listed as well, and the missing value will be "null"
+- You can use "FULL JOIN" or "FULL OUTER JOIN", it's the same
+```
+SELECT Customers.CustomerName, Orders.OrderID
+FROM Customers
+FULL JOIN Orders ON Customers.CustomerID=Orders.CustomerID
+ORDER BY Customers.CustomerName;
+```
+Take a look at JOIN/FULL_JOIN for more example
+#### 11. UNION
+The UNION operator is used to combine the result-set of two or more SELECT statements.
+- Every SELECT statement within UNION must have the same of number of columns 
+- The columns must also have similar data types
+- The columns in every SELECT statement must also be in the same order
+- You can add another column during the UNION (take a look at example 3, UNION.md)
+```
+SELECT column_name(s) FROM table1
+UNION ALL
+SELECT column_name(s) FROM table2;
+```
