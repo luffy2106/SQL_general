@@ -311,14 +311,15 @@ MIN(studentMarks) OVER (PARTITION BY sectionName) AS sectionLeast
 FROM studentsSectionWise
 ORDER BY sectionName
 ```
-##### How to use OVER with ROWS 
-syntax
+##### 14.1 How to use OVER with ROWS 
+Syntax
 ```
 ROWS BETWEEN _number_rows_preceding PRECEDING AND CURRENT ROW
 ```
-###### USE CASE 1 
+###### 14.1.1 USE CASE 1 
 Suppose that you want to calculate moving_avg_salary with the window size of 4.
 - Input
+```
 employee_id | salary
 ------------|-------
      1       | 50000
@@ -350,17 +351,17 @@ employee_id | salary | moving_avg_salary
      4       | 65000  |      57500  -- Average of (50000, 55000, 60000, 65000)
      5       | 70000  |      62500  -- Average of (55000, 60000, 65000, 70000)
 ```
-
-Exlaination
+Exlaination:
 - Row 1: Until current row there is one row => moving_avg_salary is this row
 - Row 2: Until current row there is two row => moving_avg_salary is avarage salary of current row and lastest row
 - Row 3: Until current row there is two row => moving_avg_salary is avarage salary of current row and 2 lastest row
 - Row 4: Until current row there is two row => moving_avg_salary is avarage salary of current row and 3 lastest row
 - Row 5: Until current row there is two row => moving_avg_salary is avarage salary of current row and 3 lastest row
 
-###### USE CASE 2
+###### 14.1.2 USE CASE 2
 Suppose that you want to calculate the average moving_avg_salary until the current row, you can use 'ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW'
 - Input
+```
 employee_id | salary
 ------------|-------
      1       | 50000
@@ -390,11 +391,12 @@ employee_id | salary | moving_avg_salary
      4       | 65000  |       57500   -- Average of (50000, 55000, 60000, 65000)
      5       | 70000  |       60000   -- Average of (50000, 55000, 60000, 65000, 70000)
 ```
-
-##### How to use OVER with RANGE
+##### 14.2 How to use OVER with RANGE
 The RANGE clause defines a window frame based on a range of values. Unlike ROWS, which operates strictly on row count, RANGE includes rows with values within a specified range from the current row(but by the key specified by ORDER BY), often used with an ORDER BY clause.
 
 Take a look at the example above to see the key difference between ROWS and RANGE:
+##### 14.2.1 The case when OVER and RANGE is the same
+It's when the value of the key specified by ORDER BY is unique(in the following example, the key is exam_id)
 Given Input Data
 ```
 student_id | exam_id | score
@@ -428,10 +430,9 @@ student_id | exam_id | score | running_total_score
      2     |   4     |  75   |      330  -- Cumulative sum of (80, 90, 85, 75)
      2     |   5     |  95   |      425  -- Cumulative sum of (80, 90, 85, 75, 95)
 ```
-
 The result is identical to the RANGE example because the data has a unique sequence (distinct exam_ids). In this case, both ROWS and RANGE will produce the same result.
 
-###### When Do They Differ? 
+##### 14.2.1 When Do They Differ? 
 The difference becomes more apparent when there are overlapping or duplicate values in the ORDER BY column. For instance, if exam_id had duplicates, RANGE would include all rows with the same exam_id, whereas ROWS would strictly maintain position relative to the current row.
 
 Let's consider an adjusted example where exam_id has duplicates:
