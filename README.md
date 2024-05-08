@@ -251,3 +251,232 @@ SELECT column_name(s) FROM table1
 UNION ALL
 SELECT column_name(s) FROM table2;
 ```
+
+#### 12. BETWEEN ... AND ...
+The BETWEEN operator selects values within a given range. The values can be numbers, text, or dates.
+The BETWEEN operator is inclusive: begin and end values are included.
+Syntax
+```
+SELECT column_name(s)
+FROM table_name
+WHERE column_name BETWEEN value1 AND value2;
+```
+- BETWEEN
+```
+SELECT * FROM Products
+WHERE Price BETWEEN 10 AND 20;
+```
+- NOT BETWEEN
+```
+SELECT * FROM Products
+WHERE Price NOT BETWEEN 10 AND 20;
+```
+- BETWEEN with IN
+```
+SELECT * FROM Products
+WHERE Price BETWEEN 10 AND 20
+AND CategoryID IN (1,2,3);
+```
+
+#### 13. WITH ... AS()
+NOTE : WITH clause is not supported by all database system
+The SQL WITH clause allows you to give a sub-query block a name (a process also called sub-query refactoring), which can be referenced in several places within the main SQL query. 
+```
+WITH temporaryTable (averageValue) as
+    (SELECT avg(Attr1)
+    FROM Table)
+    SELECT Attr1
+    FROM Table, temporaryTable
+    WHERE Table.Attr1 > temporaryTable.averageValue;
+```
+
+In this query, WITH clause is used to define a temporary relation temporaryTable that has only 1 attribute averageValue. averageValue holds the average value of column Attr1 described in relation Table. The SELECT statement that follows the WITH clause will produce only those tuples where the value of Attr1 in relation Table is greater than the average value obtained from the WITH clause statement. 
+
+#### 14. OVER/ PARTITION BY()/Window Functions
+Refence 
+```
+https://www.geeksforgeeks.org/sql-server-over-clause/
+```
+The main components of the OVER clause:
+- Window functions: The windows functions are needed for applying them on the window frames that are defined by the OVER clause. A window frame is a set of rows belonging to a common condition. Normally window function go with aggregation function such as AVG, SUM, MIN, MAX ...
+- PARTITION BY sub-clause: This is the main sub-clause that partitions the rows into windows and for each row, the values of window functions applied will be calculated.
+- ORDER BY: This is used to order the rows in the partition by default it is the ascending order.
+- ROWS or RANGE: It limits the rows from a start point and endpoint in the particular window, to use the ROWS and RANGE clause we need to ORDER BY clause as well. The RANGE and ROWS clauses are similar but the only difference is ROWS clause considers duplicates as well whereas the RANGE class doesn’t consider duplicates.
+
+Ex:
+```
+SELECT * , AVG(studentMarks) OVER (PARTITION BY sectionName) AS sectionAverage,
+MAX(studentMarks) OVER (PARTITION BY sectionName) AS sectionHighest,
+MIN(studentMarks) OVER (PARTITION BY sectionName) AS sectionLeast
+FROM studentsSectionWise
+ORDER BY sectionName
+```
+##### How to use OVER with ROWS 
+syntax
+```
+ROWS BETWEEN _number_rows_preceding PRECEDING AND CURRENT ROW
+```
+###### USE CASE 1 
+Suppose that you want to calculate moving_avg_salary with the window size of 4.
+- Input
+employee_id | salary
+------------|-------
+     1       | 50000
+     2       | 55000
+     3       | 60000
+     4       | 65000
+     5       | 70000
+```
+- Query
+```
+SELECT
+  employee_id,
+  salary,
+  -- Calculate the moving average with a window of 4 rows
+  AVG(salary) OVER (
+    ORDER BY employee_id
+    ROWS BETWEEN 3 PRECEDING AND CURRENT ROW  -- Includes 3 preceding rows and the current row
+  ) AS moving_avg_salary
+FROM employees
+ORDER BY employee_id;  -- Order by the same column used in the window function
+```
+- Output
+```
+employee_id | salary | moving_avg_salary
+------------|--------|-----------------
+     1       | 50000  |      50000
+     2       | 55000  |      52500  -- Average of (50000, 55000)
+     3       | 60000  |      55000  -- Average of (50000, 55000, 60000)
+     4       | 65000  |      57500  -- Average of (50000, 55000, 60000, 65000)
+     5       | 70000  |      62500  -- Average of (55000, 60000, 65000, 70000)
+```
+
+Exlaination
+- Row 1: Until current row there is one row => moving_avg_salary is this row
+- Row 2: Until current row there is two row => moving_avg_salary is avarage salary of current row and lastest row
+- Row 3: Until current row there is two row => moving_avg_salary is avarage salary of current row and 2 lastest row
+- Row 4: Until current row there is two row => moving_avg_salary is avarage salary of current row and 3 lastest row
+- Row 5: Until current row there is two row => moving_avg_salary is avarage salary of current row and 3 lastest row
+
+###### USE CASE 2
+Suppose that you want to calculate the average moving_avg_salary until the current row, you can use 'ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW'
+- Input
+employee_id | salary
+------------|-------
+     1       | 50000
+     2       | 55000
+     3       | 60000
+     4       | 65000
+     5       | 70000
+```
+- Query
+```
+SELECT *, AVG(salary)
+-- Calculate the moving average with a window of 4 rows
+AVG(salary) OVER (
+  ORDER BY employee_id
+  ROWS ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW  -- Includes all the preceding rows and the current row
+) AS moving_avg_salary
+FROM employees
+ORDER BY employee_id;  -- Order by the same column used in the window function
+```
+- Output
+```
+employee_id | salary | moving_avg_salary
+------------|--------|-----------------
+     1       | 50000  |       50000
+     2       | 55000  |       52500   -- Average of (50000, 55000)
+     3       | 60000  |       55000   -- Average of (50000, 55000, 60000)
+     4       | 65000  |       57500   -- Average of (50000, 55000, 60000, 65000)
+     5       | 70000  |       60000   -- Average of (50000, 55000, 60000, 65000, 70000)
+```
+
+##### How to use OVER with RANGE
+The RANGE clause defines a window frame based on a range of values. Unlike ROWS, which operates strictly on row count, RANGE includes rows with values within a specified range from the current row(but by the key specified by ORDER BY), often used with an ORDER BY clause.
+
+Take a look at the example above to see the key difference between ROWS and RANGE:
+Given Input Data
+```
+student_id | exam_id | score
+-----------|---------|-------
+     1     |   1     |  80
+     1     |   2     |  90
+     2     |   3     |  85
+     2     |   4     |  75
+     2     |   5     |  95
+```
+If you're calculating a running total using ROWS, you might use ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW. This is similar to RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW, but it strictly refers to the position of rows, not their values.
+```
+SELECT
+  student_id,
+  exam_id,
+  score,
+  SUM(score) OVER (
+    ORDER BY exam_id
+    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+  ) AS running_total_score
+FROM exams
+ORDER BY exam_id;
+```
+Output with ROWS
+```
+student_id | exam_id | score | running_total_score
+-----------|---------|-------|--------------------
+     1     |   1     |  80   |       80
+     1     |   2     |  90   |      170  -- Cumulative sum of (80, 90)
+     2     |   3     |  85   |      255  -- Cumulative sum of (80, 90, 85)
+     2     |   4     |  75   |      330  -- Cumulative sum of (80, 90, 85, 75)
+     2     |   5     |  95   |      425  -- Cumulative sum of (80, 90, 85, 75, 95)
+```
+
+The result is identical to the RANGE example because the data has a unique sequence (distinct exam_ids). In this case, both ROWS and RANGE will produce the same result.
+
+###### When Do They Differ? 
+The difference becomes more apparent when there are overlapping or duplicate values in the ORDER BY column. For instance, if exam_id had duplicates, RANGE would include all rows with the same exam_id, whereas ROWS would strictly maintain position relative to the current row.
+
+Let's consider an adjusted example where exam_id has duplicates:
+```
+student_id | exam_id | score
+-----------|---------|-------
+     1     |   1     |  80
+     1     |   1     |  90
+     2     |   2     |  85
+     2     |   2     |  75
+     2     |   3     |  95
+```
+If you calculate a running total with ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW, the order and sum are based strictly on row position:
+```
+SELECT
+  student_id,
+  exam_id,
+  score,
+  SUM(score) OVER (
+    ORDER BY exam_id
+    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+  ) AS running_total_score
+FROM exams
+ORDER BY exam_id;
+```
+The output with ROWS:
+```
+student_id | exam_id | score | running_total_score
+-----------|---------|-------|--------------------
+     1     |   1     |  80   |       80
+     1     |   1     |  90   |      170
+     2     |   2     |  85   |      255
+     2     |   2     |  75   |      330
+     2     |   3     |  95   |      425
+```
+If you calculate a running total with RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW, all rows with the same exam_id will be included:
+```
+student_id | exam_id | score | running_total_score
+-----------|---------|-------|--------------------
+     1     |   1     |  80   |       170  -- Includes all rows with exam_id = 1
+     1     |   1     |  90   |       170
+     2     |   2     |  85   |      330  -- Includes all rows with exam_id = 2
+     2     |   2     |  75   |      330
+     2     |   3     |  95   |      425
+```
+Key Differences:
+- ROWS strictly maintains the row position. If rows are duplicated or reordered, ROWS counts them sequentially relative to the current row.
+- RANGE considers all rows with the same value or within a specified range, accommodating situations where duplicates exist or range-based inclusion is needed.
