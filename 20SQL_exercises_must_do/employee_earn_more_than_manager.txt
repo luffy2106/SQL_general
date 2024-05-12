@@ -1,0 +1,11 @@
+Question:
+```
+https://leetcode.com/problems/employees-earning-more-than-their-managers/
+```
+Solution:
+```
+# Write your MySQL query statement below
+SELECT employee.name as Employee
+FROM Employee employee, Employee manager
+WHERE employee.managerId = manager.id and employee.salary > manager.salary;  
+```

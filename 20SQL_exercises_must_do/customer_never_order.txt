@@ -1,0 +1,15 @@
+Question:
+```
+https://leetcode.com/problems/customers-who-never-order/
+```
+Solution:
+```
+# Write your MySQL query statement below
+SELECT Customers.name as Customers 
+FROM Customers
+WHERE NOT EXISTS (
+    SELECT * FROM Orders 
+    WHERE Customers.id = Orders.customerId 
+    LIMIT 1
+);
+```

@@ -1,0 +1,11 @@
+WITH history AS
+(
+SELECT id, temperature,
+LAG(temperature, 1, 0) OVER (ORDER BY recordDate) AS prev_temperature
+FROM Weather
+)
+
+
+SELECT p1.id as id
+FROM history p1, history p2
+WHERE p1.prev_temperature  != 0 and  p1.id = p2.id and p1.temperature > p2.prev_temperature;

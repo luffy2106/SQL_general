@@ -85,16 +85,17 @@ Take a look at "REGEXP.txt" for example
 ##### 6.1 ORDER BY
 The ORDER BY keyword is used to sort the result-set in ascending or descending order.
 
-For more examples, take a look at GROUP_BY_AND_ORDER_BY.txt 
+For more examples, take a look at 
+- GROUP_BY_AND_ORDER_BY.txt 
+- 20SQL_exercises_must_do/duplicate_emails.txt
 
-#### 7. Top/LIMIT
+#### 7. LIMIT
 Get the first X rows of the table
-The following querys are equal.
-- TOP: put at the beginning of the query
-SELECT TOP 10 * FROM table_name;
 - LIMIT: put at the end of the query
+```
 SELECT * FROM table_name LIMIT 10;
-
+```
+You can use TOP command but it is not supported in MySQL
 
 #### 8. SQL variable
 To assign a value to a user-defined variable.
@@ -216,7 +217,9 @@ FROM table1
 LEFT JOIN table2
 ON table1.column_name = table2.column_name;
 ```
-Take a look at JOIN/LEFT_JOIN for more example
+For more example, take at look at  
+- JOIN/LEFT_JOIN 
+- 20SQL_exercises_must_do/combine_2_tables.txt
 ##### 10.3 RIGHT (OUTER) JOIN 
 - Returns all records from the right table(table 2), and the matched records from the left table(table 1)
 - The RIGHT JOIN keyword returns all records from the right table (table 2), even if there are no matches in the left table (table 1).
@@ -240,6 +243,16 @@ FULL JOIN Orders ON Customers.CustomerID=Orders.CustomerID
 ORDER BY Customers.CustomerName;
 ```
 Take a look at JOIN/FULL_JOIN for more example
+
+##### 10.4 SELF JOIN
+In SQL, a self join is a join operation where a table is joined with itself. This can be useful when you want to combine rows from the same table based on a related column. Self joins are typically used when you have a table that contains hierarchical data or when you need to compare rows within the same table.
+```
+SELECT column_name(s)
+FROM table1 T1, table1 T2
+WHERE condition;
+```
+For more example, take a look at:
+- 20SQL_exercises_must_do/employee_earn_more_than_manager.txt
 #### 11. UNION
 The UNION operator is used to combine the result-set of two or more SELECT statements.
 - Every SELECT statement within UNION must have the same of number of columns 
@@ -481,3 +494,46 @@ student_id | exam_id | score | running_total_score
 Key Differences:
 - ROWS strictly maintains the row position. If rows are duplicated or reordered, ROWS counts them sequentially relative to the current row.
 - RANGE considers all rows with the same value or within a specified range, accommodating situations where duplicates exist or range-based inclusion is needed.
+
+
+#### 15. EXISTS 
+The EXISTS operator is used to test for the existence of any record in a subquery.
+The EXISTS operator returns TRUE if the subquery returns one or more records.
+Syntax:
+```
+SELECT column_name(s)
+FROM table_name
+WHERE EXISTS
+(SELECT column_name FROM table_name WHERE condition);
+```
+For more example, take a look at 
+- 20SQL_exercises_must_do/customer_never_order.txt
+
+#### 16. DELETE
+The DELETE statement is used to delete existing records in a table.
+```
+DELETE FROM table_name WHERE condition;
+```
+Ex :
+```
+DELETE FROM Customers WHERE CustomerName='Alfreds Futterkiste';
+```
+For more advanced example, take a look at 
+- 20SQL_exercises_must_do/delete_duplicate_emails.txt
+
+#### 17. LAG
+
+At many instances, user would like to access data of the previous row or any row before the previous row from the current row. To solve this problem SQL Server’s LAG() window function can be used
+```
+LAG (scalar_expression [, offset [, default ]]) 
+    OVER ( [ partition_by_clause ] order_by_clause )
+```
+Ex:
+```
+SELECT Organisation, [Year], Revenue,
+LAG (Revenue, 1, 0) 
+OVER (PARTITION BY Organisation ORDER BY [Year]) AS PrevYearRevenue  
+FROM Org 
+ORDER BY Organisation, [Year]; 
+```
+
