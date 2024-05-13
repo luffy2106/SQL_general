@@ -1,4 +1,5 @@
 Question:
+NOTE : Need to revise frequently
 ```
 https://leetcode.com/problems/delete-duplicate-emails/
 ```

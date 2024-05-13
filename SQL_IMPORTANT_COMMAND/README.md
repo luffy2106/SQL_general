@@ -14,7 +14,10 @@ Key command
 - From : the source to query
 - Where : to clarify the condition
 
-Take a look at "SELECT.txt"  for example  
+For more example, take a look at 
+- SELECT.md  
+- 20SQL_exercises_must_do/big_countries.txt
+- 20SQL_exercises_must_do/find_customer_referee.txt
 
 #### 2. CASE WHEN ... ELSE ... THEN
 
@@ -42,8 +45,9 @@ Ex 2:
 SELECT OrderID, Quantity, IF(Quantity>10, "MORE", "LESS")
 FROM OrderDetails;
 ```
-
-Take a look at "IF.txt"  for example
+For more example, take a look at:
+- IF.txt
+- 20SQL_exercises_must_do/triangle-judgement.txt
 
 #### 5. Finding string by pattern 
 
@@ -82,6 +86,13 @@ Take a look at "REGEXP.txt" for example
 ##### 6.1 GROUP BY
 - The GROUP BY statement groups rows that have the same values into summary rows, like "find the number of customers in each country".
 - The GROUP BY statement is often used with aggregate functions (COUNT(), MAX(), MIN(), SUM(), AVG()) to group the result-set by one or more columns.
+
+For more example,tke a look at :
+- 20SQL_exercises_must_do/classes-more-than-5-students.txt
+- 20SQL_exercises_must_do/biggest-single-number.txt
+- 20SQL_exercises_must_do/not-boring-movies.txt
+- 20SQL_exercises_must_do/product-sales-analysis-i.txt
+- 20SQL_exercises_must_do/sales-analysis-iii.txt
 ##### 6.1 ORDER BY
 The ORDER BY keyword is used to sort the result-set in ascending or descending order.
 
@@ -187,6 +198,10 @@ SET ContactName = 'Alfred Schmidt', City= 'Frankfurt'
 WHERE CustomerID = 1;
 ```
 
+For more example, take a look at:
+- 20SQL_exercises_must_do/swap-salary.txt
+
+
 
 #### 10. JOIN
 There are the different types of the JOINs in SQL
@@ -220,6 +235,7 @@ ON table1.column_name = table2.column_name;
 For more example, take at look at  
 - JOIN/LEFT_JOIN 
 - 20SQL_exercises_must_do/combine_2_tables.txt
+- 20SQL_exercises_must_do/employee_bonus.txt
 ##### 10.3 RIGHT (OUTER) JOIN 
 - Returns all records from the right table(table 2), and the matched records from the left table(table 1)
 - The RIGHT JOIN keyword returns all records from the right table (table 2), even if there are no matches in the left table (table 1).
@@ -537,3 +553,16 @@ FROM Org
 ORDER BY Organisation, [Year]; 
 ```
 
+#### 18. The SQL IN Operator
+In SQL, the IN operator is used to specify multiple values in a WHERE clause. It allows you to specify a list of values that you want to match in a specific column.
+
+Here's an example to illustrate how the IN operator works:
+
+Let's say we have a table named Products with a column category. We want to select all products that belong to either 'Electronics' or 'Clothing'.
+```
+SELECT * FROM Products
+WHERE category IN ('Electronics', 'Clothing');
+```
+
+For more example, take a look at
+- https://leetcode.com/problems/sales-person/submissions/1257041543/

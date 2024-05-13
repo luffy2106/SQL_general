@@ -1,11 +1,33 @@
+Question:
+NOTE : Need to revise frequently
+```
+https://leetcode.com/problems/rising-temperature/
+```
+My solution:
+```
 WITH history AS
 (
-SELECT id, temperature,
-LAG(temperature, 1, 0) OVER (ORDER BY recordDate) AS prev_temperature
+SELECT *,
+LAG(temperature, 1, 0) OVER (ORDER BY recordDate) AS prev_temperature,
+LAG(recordDate, 1, 0) OVER (ORDER BY recordDate) AS prev_date
 FROM Weather
+ORDER BY recordDate
 )
-
 
 SELECT p1.id as id
 FROM history p1, history p2
-WHERE p1.prev_temperature  != 0 and  p1.id = p2.id and p1.temperature > p2.prev_temperature;
+WHERE p1.id = p2.id 
+      and p1.temperature > p2.prev_temperature 
+      and DATEDIFF(p1.recordDate, p2.prev_date ) = 1;
+```
+Solution given by platform:
+```
+SELECT w1.id
+FROM Weather AS w1 , Weather AS w2
+WHERE w1.Temperature > w2.Temperature AND DATEDIFF(w1.recordDate , w2.recordDate) = 1
+```
+
+
+
+
+

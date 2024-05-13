@@ -1,0 +1,27 @@
+Question:
+```
+https://leetcode.com/problems/sales-person/
+```
+Solution:
+```
+# Write your MySQL query statement below
+SELECT name FROM SalesPerson 
+WHERE name not IN (SELECT SalesPerson.name 
+FROM SalesPerson, Company, Orders 
+WHERE SalesPerson.sales_id = Orders.sales_id and Orders.com_id = Company.com_id 
+and Company.name = "RED");
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
