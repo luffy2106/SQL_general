@@ -1,0 +1,4 @@
+select vehicle_part.vehicle_part_id, vehicle_part.part_name from vehicle_part
+left join vehicle_part_location on vehicle_part.vehicle_part_id = vehicle_part_location.vehicle_part_id
+group by vehicle_part.part_name
+where vehicle_part_location.left_timestamp > vehicle_part_location.arrived_timestamp 
